@@ -1,4 +1,4 @@
-from engine.controller import Controller
+from music_engine.engine.controller import Controller
 
 def main():
     controller = Controller()

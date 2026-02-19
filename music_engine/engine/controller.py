@@ -1,5 +1,11 @@
-from core.note import Note
-from core.sequence import Sequence
+"""
+This class is the main interface through which users interact with the engine.
+
+It currently provides methods for adding notes to a sequence, getting the current sequence, and clearing the sequence.
+"""
+
+from music_engine.core.note import Note
+from music_engine.core.sequence import Sequence
 
 class Controller:
     def __init__(self):

@@ -57,7 +57,6 @@ class Note:
         else:
             raise TypeError("Pitch must be a MIDI number (0-127), Hz (e.g., 440.0), or the note name (e.g., 'C4').")
         
-
     #--------------------------------------    
     #Convert given type to MIDI note number
     #--------------------------------------
@@ -101,7 +100,6 @@ class Note:
         
         return midi_number
     
-
     #--------------
     #Representation
     #--------------

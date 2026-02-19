@@ -1,11 +1,11 @@
 """
 This module defines the Sequence class, which represents a sequence of musical notes.
+
 A Sequence is essentially a list of Note objects, along with some metadata such as tempo and time signature.
 """
 
-
 from typing import List
-from core.note import Note
+from music_engine.core.note import Note
 
 class Sequence:
     def __init__(self):
@@ -17,7 +17,7 @@ class Sequence:
         self.notes.append(note)
 
     def get_notes(self) -> List[Note]:
-        return self.notes
+        return list(self.notes)
     
     def total_duration(self) -> float:
         return sum(note.duration for note in self.notes)
