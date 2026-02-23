@@ -6,14 +6,18 @@ It currently provides methods for adding notes to a sequence, getting the curren
 
 from music_engine.core.note import Note
 from music_engine.core.sequence import Sequence
+from music_engine.core.track import Track
 
 class Controller:
     def __init__(self):
-        self.sequence = Sequence()
+        self.track = Track()
+        # current_sequence holds the active Sequence object
+        self.current_sequence = Sequence()
+        self.track.add_sequence(self.current_sequence)
 
-    #----------------
-    #User-API Methods
-    #----------------
+    #-------------------
+    #Note API
+    #-------------------
 
     def note(self, pitch: int, duration: float, velocity: int = 80):
         """
@@ -26,19 +30,38 @@ class Controller:
         """
 
         new_note = Note(pitch, duration, velocity)
-        self.sequence.add_note(new_note)
+        self.current_sequence.add_note(new_note)
 
-    def get_sequence(self) -> Sequence:
-        return self.sequence
-    
-    def clear(self):
-        self.sequence.clear()
+    #-------------------
+    #Sequence Management
+    #-------------------
+
+    def new_sequence(self):
+        #Start a new sequence and add it to the track
+        self.current_sequence = Sequence()
+        self.track.add_sequence(self.current_sequence)
+
+    def clear_sequence(self):
+        #Clear the current sequence
+        self.current_sequence.clear()
+
+    def get_current_sequence(self) -> Sequence:
+        return self.current_sequence
+
+    #-------------------
+    #Utility Methods    
+    #-------------------
+
+    def get_track(self) -> Track:
+        return self.track
 
     def show(self):
         #Debug method to print the current sequence of notes
-        print(self.sequence)
-        for note in self.sequence.get_notes():
-            print(note)
+        print(self.track)
+        for i, seq in enumerate(self.track.get_sequences()):
+            print(f"Sequence {i}: {seq}")
+            for note in seq.get_notes():
+                print(f"  Note: MIDI Pitch={note.midi_pitch}, Duration={note.duration}, Velocity={note.velocity}")
     
 
     
