@@ -7,6 +7,7 @@ It currently provides methods for adding notes to a sequence, getting the curren
 from music_engine.core.note import Note
 from music_engine.core.sequence import Sequence
 from music_engine.core.track import Track
+from music_engine.output.playback import PlaybackEngine
 
 class Controller:
     def __init__(self):
@@ -79,5 +80,26 @@ class Controller:
                 print(f"  Sequence {i}: {seq}")
                 for note in seq.get_notes():
                     print(f"    Note: MIDI Pitch={note.midi_pitch}, Duration={note.duration}, Velocity={note.velocity}")
+
+    #-------------------
+    #Playback
+    #-------------------
+
+    def play(self, tempo=120, track: Track = None):
+        """
+        Play one or all tracks.
+        
+        Parameters:
+        - tempo: Tempo in BPM (default 120)
+        - track: Specific track to play. If None, plays all tracks.
+        """
+        engine = PlaybackEngine(tempo=tempo)
+        if track:
+            engine.play_track(track)
+        else:
+            for t in self.tracks:
+                engine.play_track(t)
+        engine.close()
+    
 
     

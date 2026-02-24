@@ -110,3 +110,12 @@ def test_register_and_get_sequence():
     
     assert retrieved is seq
     assert c.get_sequence("nonexistent") is None
+
+def test_controller_has_play_method():
+    c = Controller()
+    track = c.new_track("test")
+    seq = track.add_sequence("seq")
+    seq.add_note('C4', 1.0)
+    # Just verify the method exists and is callable
+    assert hasattr(c, 'play')
+    assert callable(getattr(c, 'play'))

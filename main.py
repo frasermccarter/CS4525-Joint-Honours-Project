@@ -26,5 +26,23 @@ def main():
     # Display structure
     controller.show()
 
+    #Play individual sequences
+    print("\n--- Playing intro sequence ---")
+    intro.play(tempo=120)
+    
+    print("\n--- Playing verse sequence ---")
+    verse.play(tempo=120)
+
+    #Play individual tracks
+    print("\n--- Playing piano track ---")
+    piano.play(tempo=120)
+    
+    print("\n--- Playing guitar track ---")
+    guitar.play(tempo=120)
+
+    #Play and export all tracks
+    print("\n--- Playing all tracks ---")
+    controller.play(tempo=120)
+
 if __name__ == "__main__":
     main()

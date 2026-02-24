@@ -81,3 +81,11 @@ def test_add_note_returns_note_object():
     returned_note = seq.add_note('G3', 1.0)
     assert isinstance(returned_note, Note)
     assert returned_note.midi_pitch == 55
+
+
+def test_sequence_has_play_method():
+    seq = Sequence()
+    seq.add_note('C4', 1.0)
+    # Just verify the method exists and is callable
+    assert hasattr(seq, 'play')
+    assert callable(getattr(seq, 'play'))

@@ -62,3 +62,13 @@ def test_add_method():
     result = track.add(seq)
     assert len(track) == 1
     assert track.get_sequences()[0] is seq
+    
+
+def test_track_has_play_method():
+    track = Track(name="test")
+    seq = Sequence(name="seq1")
+    seq.add_note(Note(60, 1.0))
+    track.add_sequence(seq)
+    # Just verify the method exists and is callable
+    assert hasattr(track, 'play')
+    assert callable(getattr(track, 'play'))

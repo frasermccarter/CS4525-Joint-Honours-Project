@@ -56,3 +56,15 @@ class Sequence:
     def __repr__(self):
         name_part = f"'{self.name}' " if self.name else ""
         return f"Sequence {name_part}(num_notes={len(self.notes)}, total_duration={self.total_duration():.2f} beats)"
+
+    def play(self, tempo=120):
+        """
+        Play this sequence using the computer's audio output.
+        
+        Parameters:
+        - tempo: Tempo in BPM (default 120)
+        """
+        from music_engine.output.playback import PlaybackEngine
+        engine = PlaybackEngine(tempo=tempo)
+        engine.play_sequence(self)
+        engine.close()

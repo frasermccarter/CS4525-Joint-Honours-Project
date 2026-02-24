@@ -62,5 +62,16 @@ class Track:
     def __repr__(self):
         name_part = f"'{self.name}' " if self.name else ""
         return f"<Track {name_part}: {len(self)} sequences>"
-    
+
+    def play(self, tempo=120):
+        """
+        Play this track.
+        
+        Parameters:
+        - tempo: Tempo in BPM (default 120)
+        """
+        from music_engine.output.playback import PlaybackEngine
+        engine = PlaybackEngine(tempo=tempo)
+        engine.play_track(self)
+        engine.close()
 
