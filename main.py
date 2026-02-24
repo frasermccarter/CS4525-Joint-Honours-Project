@@ -1,16 +1,29 @@
-from music_engine.engine.controller import Controller
+"""
+This file is currently used for testing the basic functionality of the engine. Later it will change to a more sandboxed experience where users don't have to import or define a main function.
+"""
+
+from music_engine.engine import Controller
 
 def main():
     controller = Controller()
 
-    #User script example:
-    controller.note('C4', 1.0)  #Add a C4 note with duration of 1 beat
-    controller.note(64, 0.5, velocity=90)  #Add an E4 note with duration of 0.5 beats and velocity of 90
-    controller.note(440.0, 2.0)  #Add an A4 note (440 Hz) with duration of 2 beats
+    #Create a track and add sequences
+    piano = controller.new_track("piano")
+    
+    intro = piano.add_sequence("intro")
+    intro.add_note('C4', 0.5)
+    intro.add_note(64, 0.5, velocity=20)
+    intro.add_note(440.0, 1.0)
 
-    controller.new_sequence()  #Start a new sequence
-    controller.note('G3', 1)  #Add a G3 note
+    verse = piano.add_sequence("verse")
+    verse.add_note('G3', 1)
+    verse.add_note('G3', 1)
+    verse.add_note('G3', 1)
 
+    guitar = controller.new_track("guitar")
+    guitar.add_sequence("intro")
+
+    # Display structure
     controller.show()
 
 if __name__ == "__main__":

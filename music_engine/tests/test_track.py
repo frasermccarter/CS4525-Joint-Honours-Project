@@ -5,6 +5,7 @@ Test for the Track class in the music engine.
 import pytest
 from music_engine.core.track import Track
 from music_engine.core.sequence import Sequence
+from music_engine.core.note import Note
 
 
 def test_add_and_get_sequences():
@@ -21,7 +22,15 @@ def test_add_and_get_sequences():
 def test_add_invalid_type():
     track = Track()
     with pytest.raises(TypeError):
-        track.add_sequence("not a sequence")
+        track.add_sequence(123)  # Invalid type
+
+def test_add_sequence_with_string_name():
+    track = Track()
+    seq = track.add_sequence("verse")
+    assert len(track) == 1
+    assert seq.name == "verse"
+    assert track.get_sequences()[0] is seq
+    assert isinstance(seq, Sequence)
 
 def test_len_and_clear():
     track = Track()
@@ -35,6 +44,21 @@ def test_len_and_clear():
 
 def test_repr():
     track = Track()
-    assert repr(track) == "<Track: 0 sequences>"
+    assert repr(track) == "<Track : 0 sequences>"
     track.add_sequence(Sequence())
-    assert repr(track) == "<Track: 1 sequences>"
+    assert repr(track) == "<Track : 1 sequences>"
+
+
+def test_repr_with_name():
+    track = Track(name="piano")
+    assert repr(track) == "<Track 'piano' : 0 sequences>"
+    track.add_sequence(Sequence())
+    assert repr(track) == "<Track 'piano' : 1 sequences>"
+
+
+def test_add_method():
+    track = Track()
+    seq = Sequence()
+    result = track.add(seq)
+    assert len(track) == 1
+    assert track.get_sequences()[0] is seq
