@@ -36,13 +36,16 @@ def main():
     #Play individual tracks
     print("\n--- Playing piano track ---")
     piano.play(tempo=120)
+    piano.export_midi("piano_output.mid", tempo=120)
     
     print("\n--- Playing guitar track ---")
     guitar.play(tempo=120)
+    guitar.export_midi("guitar_output.mid", tempo=120)
 
-    #Play and export all tracks
+    # Play and export all tracks
     print("\n--- Playing all tracks ---")
     controller.play(tempo=120)
+    controller.export_midi("test_output.mid", tempo=120)
 
 if __name__ == "__main__":
     main()

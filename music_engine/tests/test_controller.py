@@ -111,6 +111,36 @@ def test_register_and_get_sequence():
     assert retrieved is seq
     assert c.get_sequence("nonexistent") is None
 
+
+def test_export_multiple_tracks_to_single_file(tmp_path):
+    c = Controller()
+    
+    #Create piano track
+    piano = c.new_track("piano")
+    intro = piano.add_sequence("intro")
+    intro.add_note('C4', 0.5)
+    intro.add_note(64, 0.5, velocity=20)
+    
+    #Create guitar track
+    guitar = c.new_track("guitar")
+    guitar.add_sequence("intro")
+    guitar.add_sequence("verse")
+    verse = guitar.get_sequences()[1]
+    verse.add_note('G3', 1)
+    
+    #Export all tracks to one file
+    output_file = tmp_path / "combined.mid"
+    c.export_midi(str(output_file), tempo=120)
+    
+    assert output_file.exists()
+    assert output_file.stat().st_size > 0
+    
+    #Verify it's a multi-track MIDI file by checking it can be loaded
+    import mido
+    mid = mido.MidiFile(str(output_file))
+    #Should have at least 2 tracks
+    assert len(mid.tracks) >= 2
+
 def test_controller_has_play_method():
     c = Controller()
     track = c.new_track("test")

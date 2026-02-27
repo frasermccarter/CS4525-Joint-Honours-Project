@@ -8,6 +8,7 @@ from music_engine.core.note import Note
 from music_engine.core.sequence import Sequence
 from music_engine.core.track import Track
 from music_engine.output.playback import PlaybackEngine
+from music_engine.output.midi_export import MIDIExporter
 
 class Controller:
     def __init__(self):
@@ -100,6 +101,27 @@ class Controller:
             for t in self.tracks:
                 engine.play_track(t)
         engine.close()
+
+    #-------------------
+    #MIDI Export
+    #-------------------
+
+    def export_midi(self, filename, tempo=120, track: Track = None):
+        """
+        Export tracks to a MIDI file.
+        
+        Parameters:
+        - filename: Output MIDI file path
+        - tempo: Tempo in BPM (default 120)
+        - track: Specific track to export. If None, exports all tracks as separate MIDI tracks in one file.
+        """
+        exporter = MIDIExporter(tempo=tempo)
+        if track:
+            # Export single track
+            exporter.export(track, filename)
+        else:
+            # Export all tracks as separate MIDI tracks in one file
+            exporter.export_multiple(self.tracks, filename)
     
 
     
