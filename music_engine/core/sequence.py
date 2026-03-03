@@ -41,6 +41,64 @@ class Sequence:
         self.notes.append(note)
         return note
 
+    def wait(self, duration: float) -> Note:
+        """
+        Add silence/rest to the sequence.
+        
+        Parameters:
+        - duration: Duration of the rest in beats
+        
+        Returns:
+        - The silent Note object that was added
+        """
+        if duration <= 0:
+            raise ValueError("Wait duration must be a positive number.")
+        
+        # Create a silent note with velocity 0 (will not produce sound)
+        silent_note = Note(0, duration, velocity=0)
+        self.notes.append(silent_note)
+        return silent_note
+
+    def generate_random_walk(self, start_pitch, num_notes, max_step=2, duration=0.5, velocity=80, scale_type=None):
+        """
+        Generate notes using a random walk algorithm and add them to the sequence.
+        
+        Parameters:
+        - start_pitch: Starting pitch (MIDI number, frequency, or note name like 'C3')
+        - num_notes: Number of notes to generate
+        - max_step: Maximum semitone step (±max_step). Default: 2
+        - duration: Duration of each note in beats. Default: 0.5
+        - velocity: Velocity of each note (0-127). Default: 80
+        - scale_type: If set to 'major' or 'minor', uses scale-constrained walk. If None, uses chromatic walk.
+        
+        Returns:
+        - List of Note objects that were added
+        """
+        from music_engine.algorithms.random_walk import RandomWalk
+        from music_engine.core.note import Note as NoteClass
+        
+        #Convert start_pitch to MIDI if needed
+        start_note = NoteClass(start_pitch, 0.1)  #Temporary note to get MIDI pitch
+        start_midi = start_note.midi_pitch
+        
+        #Generate notes using the appropriate random walk method
+        if scale_type in ['major', 'minor']:
+            #Use scale-constrained random walk
+            generator = RandomWalk(scale_type=scale_type)
+            generated_pitches = generator.generate(start_midi, num_notes, duration)
+        elif scale_type is None:
+            #Use chromatic random walk
+            generator = RandomWalk()
+            generated_pitches = generator.generate_chromatic(start_midi, num_notes, max_step, duration)
+        
+        #Add the generated notes to the sequence
+        added_notes = []
+        for pitch, dur in generated_pitches:
+            note = self.add_note(int(pitch), dur, velocity=velocity)
+            added_notes.append(note)
+        
+        return added_notes
+
     def get_notes(self) -> List[Note]:
         return list(self.notes)
     

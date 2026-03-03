@@ -6,7 +6,7 @@ Pitch can be defined in multiple ways:
 - Frequency in Hz (e.g., 440.0 for A4)
 - Note name (e.g., "C4", "A#3")
 
-Velocity is user-defined on a scale of 0-100 and internally scaled to the MIDI standard of 0-100.
+Velocity is user-defined on a scale of 0-100 and internally scaled to the MIDI standard of 0-127.
 
 Duration is defined in beats.
 """
@@ -14,7 +14,7 @@ Duration is defined in beats.
 import math
 
 class Note:
-    # Note map for converting note names to MIDI numbers
+    #Note map for converting note names to MIDI numbers
     NOTE_MAP = {
         "C": 0, "C#": 1, "Db": 1,
         "D": 2, "D#": 3, "Eb": 3,
@@ -75,28 +75,36 @@ class Note:
     
     
     def _note_name_to_midi(self, note_name):
-        note_name = note_name.strip().upper()
-
-        #Split the note name into pitch and octave
+        note_name = note_name.strip()
+        
+        #Split the note name into pitch and octave (case-sensitive matching)
         if len(note_name) < 2:
             raise ValueError("Invalid note name format. Expected a format like 'C4' or 'A#3'.")
         
-        #Handle sharp and flat notes
-        if note_name[1] in ['#', 'B']:
+        #Handle sharp and flat notes (check second character)
+        if len(note_name) > 2 and note_name[1] in ['#', 'b']:
             pitch = note_name[:2]
             octave = note_name[2:]
         else:
-            pitch = note_name[0]
+            pitch = note_name[0].upper()  # Single letter note names
             octave = note_name[1:]
-
-        if pitch not in self.NOTE_MAP:
-            raise ValueError(f"Invalid pitch '{pitch}' in note name. Expected a note from C, C#, D, D#, E, F, F#, G, G#, A, A#, B.")
         
-        semitone = self.NOTE_MAP[pitch]
-        midi_number = (int(octave) + 1) * 12 + semitone
+        #Normalise pitch for lookup (handle case-insensitive sharp/flat)
+        pitch_normalised = pitch.upper() if len(pitch) == 1 else pitch.replace('b', 'b').replace('#', '#')
+        if len(pitch) == 2:
+            pitch_normalised = pitch[0].upper() + pitch[1]
+
+        if pitch_normalised not in self.NOTE_MAP:
+            raise ValueError(f"Invalid pitch '{pitch}' in note name. Expected a note from C, C#, Db, D, D#, Eb, E, F, F#, Gb, G, G#, Ab, A, A#, Bb, B.")
+        
+        try:
+            semitone = self.NOTE_MAP[pitch_normalised]
+            midi_number = (int(octave) + 1) * 12 + semitone
+        except ValueError:
+            raise ValueError(f"Invalid octave number in note name '{note_name}'.")
 
         if not (0 <= midi_number <= 127):
-            raise ValueError("Frequency is out of MIDI range (0-127).")
+            raise ValueError("Note is out of MIDI range (0-127).")
         
         return midi_number
     

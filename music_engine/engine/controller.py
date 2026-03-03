@@ -7,13 +7,17 @@ It currently provides methods for adding notes to a sequence, getting the curren
 from music_engine.core.note import Note
 from music_engine.core.sequence import Sequence
 from music_engine.core.track import Track
+
 from music_engine.output.playback import PlaybackEngine
 from music_engine.output.midi_export import MIDIExporter
+
+from music_engine.algorithms.random_walk import RandomWalk
 
 class Controller:
     def __init__(self):
         self.tracks = []
         self._sequences = {}  #Registry of sequences by name for sharing across tracks
+        self._track_functions = []  #Registry for track setup functions
 
     #-------------------
     #Track Management
@@ -81,6 +85,22 @@ class Controller:
                 print(f"  Sequence {i}: {seq}")
                 for note in seq.get_notes():
                     print(f"    Note: MIDI Pitch={note.midi_pitch}, Duration={note.duration}, Velocity={note.velocity}")
+
+    #-------------------
+    #Algorithmic Composition
+    #-------------------
+
+    def generate_random_walk(self, root: int, steps: int, step_duration: float, scale_type="major"):
+        generator = RandomWalk(scale_type=scale_type)
+        
+        root_note = Note(root, 1)
+        root_midi = root_note.midi_pitch  # Ensure we have the MIDI pitch value
+
+        generated = generator.generate(root_midi, steps, step_duration)
+
+        for pitch, duration in generated:
+            self.note(pitch, duration)
+
 
     #-------------------
     #Playback
