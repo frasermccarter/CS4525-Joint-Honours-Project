@@ -4,6 +4,8 @@ This class is the main interface through which users interact with the engine.
 It currently provides methods for adding notes to a sequence, getting the current sequence, and clearing the sequence, adding and managing tracks.
 """
 
+import random
+
 from music_engine.core.note import Note
 from music_engine.core.sequence import Sequence
 from music_engine.core.track import Track
@@ -12,6 +14,7 @@ from music_engine.output.playback import PlaybackEngine
 from music_engine.output.midi_export import MIDIExporter
 
 from music_engine.algorithms.random_walk import RandomWalk
+from music_engine.algorithms.rhythm import RhythmGenerator
 
 class Controller:
     def __init__(self):
@@ -101,6 +104,17 @@ class Controller:
         for pitch, duration in generated:
             self.note(pitch, duration)
 
+    def generate_rhythm_sequence(self, pitch=60, total_beats=4):
+        rhythm_gen = RhythmGenerator()
+        durations = rhythm_gen.generate_bar(total_beats)
+
+        sequence = Sequence()
+
+        for dur in durations:
+            note = Note(pitch=pitch, duration=dur, velocity=80)
+            sequence.add_note(note)
+
+        return sequence
 
     #-------------------
     #Playback

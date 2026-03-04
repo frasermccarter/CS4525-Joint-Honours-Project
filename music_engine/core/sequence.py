@@ -99,6 +99,83 @@ class Sequence:
         
         return added_notes
 
+    def generate_rhythm_sequence(self, pitch, total_beats=4, velocity=80, allowed_durations=None):
+        """
+        Generate notes using a rhythm generator and add them to the sequence.
+        
+        Parameters:
+        - pitch: The pitch for all generated notes (MIDI number, frequency, or note name like 'C4')
+        - total_beats: Total duration of the rhythmic sequence in beats. Default: 4
+        - velocity: Velocity for all notes (0-100, default 80)
+        - allowed_durations: List of allowed note durations. If None, uses default [0.25, 0.5, 1]
+        
+        Returns:
+        - List of Note objects that were added
+        """
+        from music_engine.algorithms.rhythm import RhythmGenerator
+        
+        rhythm_gen = RhythmGenerator(allowed_durations=allowed_durations)
+        durations = rhythm_gen.generate_bar(total_beats)
+        
+        added_notes = []
+        for duration in durations:
+            note = self.add_note(pitch, duration, velocity=velocity)
+            added_notes.append(note)
+        
+        return added_notes
+
+    def generate_melodic_rhythm(self, start_pitch, num_notes, total_beats=4, 
+                               max_step=2, scale_type=None, velocity=80, allowed_durations=None):
+        """
+        Generate notes with both random pitches AND variable rhythms.
+        
+        Combines random walk (for pitch variation) with rhythm generation (for duration variation)
+        to create more expressive melodic sequences.
+        
+        Parameters:
+        - start_pitch: Starting pitch (MIDI number, frequency, or note name like 'C4')
+        - num_notes: Number of notes to generate
+        - total_beats: Total duration of the sequence in beats. Default: 4
+        - max_step: Maximum semitone step for chromatic walk (±max_step). Default: 2
+        - scale_type: If 'major' or 'minor', uses scale-constrained walk. If None, uses chromatic walk.
+        - velocity: Velocity for all notes (0-100, default 80)
+        - allowed_durations: List of allowed note durations. If None, uses default [0.25, 0.5, 1]
+        
+        Returns:
+        - List of Note objects that were added
+        """
+        from music_engine.algorithms.random_walk import RandomWalk
+        from music_engine.algorithms.rhythm import RhythmGenerator
+        
+        #Convert start_pitch to MIDI if needed
+        start_note = Note(start_pitch, 0.1)
+        start_midi = start_note.midi_pitch
+        
+        #Generate pitches using random walk
+        if scale_type in ['major', 'minor']:
+            walk = RandomWalk(scale_type=scale_type)
+            pitches_with_temp_dur = walk.generate(start_midi, num_notes, 0.5)
+            pitches = [int(p[0]) for p in pitches_with_temp_dur]
+        else:
+            walk = RandomWalk()
+            pitches_with_temp_dur = walk.generate_chromatic(start_midi, num_notes, max_step, 0.5)
+            pitches = [int(p[0]) for p in pitches_with_temp_dur]
+        
+        #Generate rhythms
+        rhythm_gen = RhythmGenerator(allowed_durations=allowed_durations)
+        durations = rhythm_gen.generate_bar(total_beats)
+        
+        #Combine pitches and rhythms
+        #If there are more pitches than durations, cycle through the durations
+        #If there are more durations than pitches, only use as many as needed
+        added_notes = []
+        for i, pitch in enumerate(pitches):
+            duration = durations[i % len(durations)]
+            note = self.add_note(pitch, duration, velocity=velocity)
+            added_notes.append(note)
+        
+        return added_notes
+
     def get_notes(self) -> List[Note]:
         return list(self.notes)
     

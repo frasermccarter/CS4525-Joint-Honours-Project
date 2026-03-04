@@ -49,6 +49,18 @@ def track(guitar):
     verse3 = guitar.add_sequence("verse3")
     verse3.generate_random_walk(start_pitch='C4', num_notes=16, max_step=2, duration=0.5, scale_type='minor')
 
+#test for melodic rhythm generation
+@register_track
+def track(bass):
+    bass_seq = bass.add_sequence("bassline")
+    bass_seq.generate_melodic_rhythm(start_pitch=60, num_notes=16, allowed_durations=[0.25, 0.5, 1.0, 1.5, 2, 3], total_beats=8.0, scale_type='major', velocity=90)
+
+#test for just rhythm generation
+@register_track
+def track(drum):
+    drum_seq = drum.add_sequence("drum_pattern")
+    drum_seq.generate_rhythm_sequence(pitch=36, allowed_durations=[0.25, 0.5, 1.0, 1.5, 2, 3], total_beats=8.0, velocity=100)
+
 
 def main():
     #Create tracks for each registered track function
@@ -70,9 +82,9 @@ def main():
     controller.show()
 
     #playback test
-    print("\n--- Playing guitar track ---")
-    guitar = tracks_by_name['guitar']
-    guitar.play(tempo=120)
+    print("\n--- Playing bass track ---")
+    bass = tracks_by_name['bass']
+    bass.play(tempo=120)
     #controller.export_midi("test_output.mid", tempo=120)
 
 
