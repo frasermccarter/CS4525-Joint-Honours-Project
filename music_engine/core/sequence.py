@@ -176,6 +176,32 @@ class Sequence:
         
         return added_notes
 
+    def generate_arpeggio(self, chord_symbol, octave=4, note_duration=0.5, direction="up", velocity=80):
+        """
+        Generate an arpeggio from a chord and add notes to the sequence.
+        
+        Parameters:
+        - chord_symbol: String representing the chord (e.g., "Cmaj", "Am", "G7")
+        - octave: Octave number for the root note (default 4)
+        - note_duration: Duration of each note in beats (default 0.5)
+        - direction: Direction to order the arpeggio: "up", "down", or "random" (default "up")
+        - velocity: Velocity for all notes (0-100, default 80)
+        
+        Returns:
+        - List of Note objects that were added
+        """
+        from music_engine.algorithms.arpeggio import Arpeggio
+        
+        arp_gen = Arpeggio()
+        arpeggio_notes = arp_gen.generate_from_chord(chord_symbol, octave, note_duration, direction)
+        
+        added_notes = []
+        for pitch, duration in arpeggio_notes:
+            note = self.add_note(pitch, duration, velocity=velocity)
+            added_notes.append(note)
+        
+        return added_notes
+
     def get_notes(self) -> List[Note]:
         return list(self.notes)
     

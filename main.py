@@ -13,7 +13,7 @@ from music_engine.core.chord import Chord
 c = Chord("C")
 print(c.get_chord_pitches()) #Expect something like [60, 64, 67]
 
-a = Chord("Amaj7")
+a = Chord("Adim")
 print(a.get_chord_pitches())
 
 
@@ -29,8 +29,9 @@ def register_track(func):
 @register_track
 def track(piano):
     intro = piano.add_sequence("intro")
-    for pitch in a.get_chord_pitches():
-        intro.add_note(pitch, 0.5)
+    intro.generate_drum_pattern("latin_samba", total_beats=4)
+    # for pitch in a.get_chord_pitches():
+    #     intro.add_note(pitch, 1.0)
 
     # intro.add_note('C4', 0.5)
     # intro.add_note(64, 0.5, velocity=20)

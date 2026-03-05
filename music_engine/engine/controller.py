@@ -15,6 +15,7 @@ from music_engine.output.midi_export import MIDIExporter
 
 from music_engine.algorithms.random_walk import RandomWalk
 from music_engine.algorithms.rhythm import RhythmGenerator
+from music_engine.algorithms.arpeggio import Arpeggio
 
 class Controller:
     def __init__(self):
@@ -114,6 +115,17 @@ class Controller:
             note = Note(pitch=pitch, duration=dur, velocity=80)
             sequence.add_note(note)
 
+        return sequence
+    
+    def generate_arpeggio(self, chord_symbol, octave=4, note_duration=0.5, direction="up"):
+        arp_gen = Arpeggio()
+        arpeggio_notes = arp_gen.generate_from_chord(chord_symbol, octave, note_duration, direction)
+        
+        sequence = Sequence()
+        for pitch, duration in arpeggio_notes:
+            note = Note(pitch, duration, velocity=80)
+            sequence.add_note(note)
+        
         return sequence
 
     #-------------------
