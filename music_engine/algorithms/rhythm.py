@@ -34,8 +34,11 @@ class RhythmGenerator:
         Raises:
         - ValueError: If total_beats is invalid or impossible to fill with given durations.
         """
-        if total_beats <= 0:
-            raise ValueError("total_beats must be a positive number.")
+        if total_beats < 0:
+            raise ValueError("total_beats must be a non-negative number.")
+        
+        if total_beats == 0:
+            return []
         
         rhythm = []
         current_sum = 0.0
@@ -56,6 +59,8 @@ class RhythmGenerator:
             next_duration = random.choice(valid_durations)
             rhythm.append(next_duration)
             current_sum += next_duration
+            # Round to avoid floating point accumulation errors
+            current_sum = round(current_sum, 10)
         
         return rhythm
     

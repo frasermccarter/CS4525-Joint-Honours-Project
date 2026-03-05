@@ -90,8 +90,11 @@ class Chord:
     
     def _get_root_midi(self):
         note_string = f"{self.root_name}{self.octave}"
-        note = Note(note_string, duration=1)  #Duration doesn't matter here
-        return note.midi_pitch
+        try:
+            note = Note(note_string, duration=1)  #Duration doesn't matter here
+            return note.midi_pitch
+        except ValueError as e:
+            raise ValueError(f"Unknown chord symbol. '{self.root_name}' is not a valid note. {str(e)}")
     
     def get_chord_pitches(self):
         if self.quality == 'major':
