@@ -29,9 +29,8 @@ def register_track(func):
 @register_track
 def track(piano):
     intro = piano.add_sequence("intro")
-    intro.generate_drum_pattern("latin_samba", total_beats=4)
-    # for pitch in a.get_chord_pitches():
-    #     intro.add_note(pitch, 1.0)
+    for pitch in a.get_chord_pitches():
+        intro.add_note(pitch, 1.0)
 
     # intro.add_note('C4', 0.5)
     # intro.add_note(64, 0.5, velocity=20)

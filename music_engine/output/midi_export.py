@@ -36,6 +36,24 @@ class MIDIExporter:
             self._add_track_to_midi(mid, track)
         mid.save(filename)
 
+    def export_tracks_to_midi(self, tracks):
+        """
+        Export tracks to MIDI data without saving to file.
+        
+        Parameters:
+        - tracks: A list of Track objects (or single Track) to export
+        
+        Returns:
+        - A MidiFile object containing the tracks
+        """
+        if not isinstance(tracks, list):
+            tracks = [tracks]
+        
+        mid = MidiFile(ticks_per_beat=self.ticks_per_beat)
+        for track in tracks:
+            self._add_track_to_midi(mid, track)
+        return mid
+
     def _add_track_to_midi(self, midi_file, track):
         """
         Add a track's sequences and notes to the MIDI file as a separate MIDI track.

@@ -19,11 +19,14 @@ class RhythmGenerator:
                 raise ValueError("allowed_durations list cannot be empty.")
             if not all(d > 0 for d in allowed_durations):
                 raise ValueError("All allowed durations must be positive numbers.")
-            self.allowed_durations = allowed_durations
+            self.allowed_durations = sorted(allowed_durations, reverse=True)  # Sort largest first
 
     def generate_bar(self, total_beats=4):
         """
         Generate a list of durations that sum to exactly total_beats.
+        
+        Uses a backtracking algorithm to find a valid combination of durations
+        that sum to the target total_beats.
         
         Parameters:
         - total_beats: Total duration of the bar in beats (default 4)
@@ -40,27 +43,52 @@ class RhythmGenerator:
         if total_beats == 0:
             return []
         
-        rhythm = []
-        current_sum = 0.0
-        epsilon = 1e-9  # Floating-point tolerance to handle precision errors
+        epsilon = 1e-9
+        #Try to find a valid combination using backtracking
+        result = self._find_rhythm(total_beats, [], epsilon)
         
-        while current_sum < total_beats - epsilon:
-            remaining = total_beats - current_sum
-            
-            # Only choose durations that fit (with epsilon tolerance)
-            valid_durations = [d for d in self.allowed_durations if d <= remaining + epsilon]
-            
-            if not valid_durations:
-                raise ValueError(
-                    f"Cannot fill a bar of {total_beats} beats with allowed durations {self.allowed_durations}. "
-                    f"Remaining: {remaining:.4f} beats. Consider adding smaller duration values."
-                )
-            
-            next_duration = random.choice(valid_durations)
-            rhythm.append(next_duration)
-            current_sum += next_duration
-            # Round to avoid floating point accumulation errors
-            current_sum = round(current_sum, 10)
+        if result is None:
+            raise ValueError(
+                f"Cannot fill a bar of {total_beats} beats with allowed durations {sorted(self.allowed_durations, reverse=True)}. "
+                f"Consider adding smaller duration values or adjusting total_beats."
+            )
         
-        return rhythm
+        return result
+
+    def _find_rhythm(self, remaining, current_rhythm, epsilon):
+        """
+        Recursively find a valid rhythm combination using backtracking.
+        
+        Parameters:
+        - remaining: Remaining beats to fill
+        - current_rhythm: Current list of durations selected
+        - epsilon: Floating-point tolerance
+        
+        Returns:
+        - A valid rhythm list if found, None otherwise
+        """
+        #Base case: we've filled the total
+        if remaining < epsilon:
+            return current_rhythm if remaining < epsilon else None
+        
+        #Try each duration, starting with largest for efficiency
+        durations_to_try = [d for d in self.allowed_durations if d <= remaining + epsilon]
+        
+        if not durations_to_try:
+            return None
+        
+        #Shuffle to add randomness while still guaranteeing we find a solution
+        random.shuffle(durations_to_try)
+        
+        for duration in durations_to_try:
+            new_remaining = remaining - duration
+            #Round to avoid floating point accumulation errors
+            new_remaining = round(new_remaining, 10)
+            
+            result = self._find_rhythm(new_remaining, current_rhythm + [duration], epsilon)
+            if result is not None:
+                return result
+        
+        return None
     
+

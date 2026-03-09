@@ -148,6 +148,24 @@ class Controller:
                 engine.play_track(t)
         engine.close()
 
+    def play_polyphonic(self, tempo=120, tracks=None):
+        """
+        Play one or more tracks simultaneously with polyphonic mixing.
+        
+        Parameters:
+        - tempo: Tempo in BPM (default 120)
+        - tracks: List of specific tracks to play, or None to play all tracks polyphonically.
+        """
+        engine = PlaybackEngine(tempo=tempo)
+        if tracks:
+            if isinstance(tracks, list):
+                engine.play_polyphonic(tracks)
+            else:
+                engine.play_polyphonic(tracks)
+        else:
+            engine.play_polyphonic(self.tracks)
+        engine.close()
+
     #-------------------
     #MIDI Export
     #-------------------
