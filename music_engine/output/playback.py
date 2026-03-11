@@ -137,11 +137,20 @@ class PlaybackEngine:
         Returns:
         - A numpy array containing the rendered audio
         """
+        # Envelope timings
+        attack_time = 0.01   # 10ms
+        release_time = 0.02  # 20ms
+        
+        # Account for envelope in the tone duration
+        # The requested duration_seconds should be the total time INCLUDING envelope
+        # So the tone itself should be shorter to leave room for the release
+        tone_duration = max(0.001, duration_seconds - release_time)  # Ensure minimum duration
+        
         #Calculate frequency from MIDI pitch
         frequency = 440 * (2 ** ((note.midi_pitch - 69) / 12))
 
         #Generate time array
-        t = np.linspace(0, duration_seconds, int(self.sample_rate * duration_seconds), False)
+        t = np.linspace(0, tone_duration, int(self.sample_rate * tone_duration), False)
 
         #Generate sine wave
         waveform = np.sin(2 * np.pi * frequency * t)
