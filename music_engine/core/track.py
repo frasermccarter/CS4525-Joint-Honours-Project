@@ -11,10 +11,6 @@ class Track:
         self._sequences: List[Sequence] = []
         self.controller = controller
 
-    def add(self, sequence: Sequence) -> Sequence:
-        #Alias for add_sequence to make the API more user-friendly
-        return self.add_sequence(sequence)
-
     def add_sequence(self, sequence) -> Sequence:
         """
         Add a sequence to this track.

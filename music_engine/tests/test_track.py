@@ -56,10 +56,10 @@ def test_repr_with_name():
     assert repr(track) == "<Track 'piano' : 1 sequences>"
 
 
-def test_add_method():
+def test_add_sequence_method():
     track = Track()
     seq = Sequence()
-    result = track.add(seq)
+    result = track.add_sequence(seq)
     assert len(track) == 1
     assert track.get_sequences()[0] is seq
     

@@ -25,11 +25,11 @@ class Arpeggio:
         """
         chord = Chord(chord_symbol, octave=octave)
         pitches = chord.get_chord_pitches()
-        return self.order_arpeggio_notes(direction, pitches, note_duration)
+        return self._order_arpeggio_notes(direction, pitches, note_duration)
     
-    def order_arpeggio_notes(self, direction, pitch, note_duration):
+    def _order_arpeggio_notes(self, direction, pitch, note_duration):
         """
-        Order the arpeggio notes in a specific direction.
+        Private method to order the arpeggio notes in a specific direction.
         
         Parameters:
         - direction: "up", "down", or "random"

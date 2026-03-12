@@ -58,6 +58,10 @@ class Sequence:
         silent_note = Note(0, duration, velocity=0)
         self.notes.append(silent_note)
         return silent_note
+    
+#-------------------
+#Algorithmic Generation Methods
+#-------------------
 
     def generate_random_walk(self, start_pitch, num_notes, max_step=2, duration=0.5, velocity=80, scale_type=None):
         """
@@ -208,6 +212,10 @@ class Sequence:
             added_notes.append(note)
         
         return added_notes
+
+#-------------------
+#Utility Methods
+#-------------------
 
     def get_notes(self) -> List[Note]:
         return list(self.notes)

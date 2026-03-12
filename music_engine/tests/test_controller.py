@@ -32,7 +32,7 @@ def test_show_prints_tracks(capsys):
     seq = Sequence(name="intro")
     seq.add_note(Note(60, 1.0))
     seq.add_note(Note(62, 2.0, velocity=10))
-    track.add(seq)
+    track.add_sequence(seq)
     c.add_track(track)
     c.show()
     captured = capsys.readouterr()

@@ -18,25 +18,26 @@ def test_arpeggio_generate_from_chord():
 
 def test_arpeggio_ordering():
     arp = Arpeggio()
-    pitches = [60, 64, 67]  # C4, E4, G4
     
-    # Test ascending order
-    ordered_up = arp.order_arpeggio_notes("up", pitches, note_duration=0.5)
-    assert [p for p, d in ordered_up] == sorted(pitches)
+    # Test ascending order (tested through public API)
+    ordered_up = arp.generate_from_chord("Cmaj", octave=4, note_duration=0.5, direction="up")
+    pitches_up = [p for p, d in ordered_up]
+    assert pitches_up == sorted(pitches_up), "Ascending order should be sorted"
     
-    # Test descending order
-    ordered_down = arp.order_arpeggio_notes("down", pitches, note_duration=0.5)
-    assert [p for p, d in ordered_down] == sorted(pitches, reverse=True)
+    # Test descending order (tested through public API)
+    ordered_down = arp.generate_from_chord("Cmaj", octave=4, note_duration=0.5, direction="down")
+    pitches_down = [p for p, d in ordered_down]
+    assert pitches_down == sorted(pitches_down, reverse=True), "Descending order should be reverse sorted"
     
     # Test random order (just check that all pitches are present)
-    ordered_random = arp.order_arpeggio_notes("random", pitches, note_duration=0.5)
+    ordered_random = arp.generate_from_chord("Cmaj", octave=4, note_duration=0.5, direction="random")
     random_pitches = [p for p, d in ordered_random]
-    assert sorted(random_pitches) == sorted(pitches)
+    assert sorted(random_pitches) == sorted(pitches_up), "Random order should contain same pitches"
 
 def test_arpeggio_invalid_direction():
     arp = Arpeggio()
     try:
-        arp.order_arpeggio_notes("invalid_direction", [60, 64, 67], note_duration=0.5)
+        arp.generate_from_chord("Cmaj", octave=4, note_duration=0.5, direction="invalid_direction")
         assert False, "Expected ValueError for invalid direction"
     except ValueError as e:
         assert str(e) == "Invalid direction. Choose 'up', 'down', or 'random'."

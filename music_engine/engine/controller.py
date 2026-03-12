@@ -4,18 +4,11 @@ This class is the main interface through which users interact with the engine.
 It currently provides methods for adding notes to a sequence, getting the current sequence, and clearing the sequence, adding and managing tracks.
 """
 
-import random
-
-from music_engine.core.note import Note
 from music_engine.core.sequence import Sequence
 from music_engine.core.track import Track
 
 from music_engine.output.playback import PlaybackEngine
 from music_engine.output.midi_export import MIDIExporter
-
-from music_engine.algorithms.random_walk import RandomWalk
-from music_engine.algorithms.rhythm import RhythmGenerator
-from music_engine.algorithms.arpeggio import Arpeggio
 
 class Controller:
     def __init__(self):
@@ -91,44 +84,6 @@ class Controller:
                     print(f"    Note: MIDI Pitch={note.midi_pitch}, Duration={note.duration}, Velocity={note.velocity}")
 
     #-------------------
-    #Algorithmic Composition
-    #-------------------
-
-    def generate_random_walk(self, root: int, steps: int, step_duration: float, scale_type="major"):
-        generator = RandomWalk(scale_type=scale_type)
-        
-        root_note = Note(root, 1)
-        root_midi = root_note.midi_pitch  # Ensure we have the MIDI pitch value
-
-        generated = generator.generate(root_midi, steps, step_duration)
-
-        for pitch, duration in generated:
-            self.note(pitch, duration)
-
-    def generate_rhythm_sequence(self, pitch=60, total_beats=4):
-        rhythm_gen = RhythmGenerator()
-        durations = rhythm_gen.generate_bar(total_beats)
-
-        sequence = Sequence()
-
-        for dur in durations:
-            note = Note(pitch=pitch, duration=dur, velocity=80)
-            sequence.add_note(note)
-
-        return sequence
-    
-    def generate_arpeggio(self, chord_symbol, octave=4, note_duration=0.5, direction="up"):
-        arp_gen = Arpeggio()
-        arpeggio_notes = arp_gen.generate_from_chord(chord_symbol, octave, note_duration, direction)
-        
-        sequence = Sequence()
-        for pitch, duration in arpeggio_notes:
-            note = Note(pitch, duration, velocity=80)
-            sequence.add_note(note)
-        
-        return sequence
-
-    #-------------------
     #Playback
     #-------------------
 
@@ -172,7 +127,7 @@ class Controller:
 
     def export_midi(self, filename, tempo=120, track: Track = None):
         """
-        Export tracks to a MIDI file.
+        Export tracks to a MIDI file. USED FOR TESTING.
         
         Parameters:
         - filename: Output MIDI file path
