@@ -15,6 +15,9 @@ def track1(track):
 
     arpeggio.play(tempo=120)
 
+
+
+
 """
 Uncomment the line below and fill in the blanks to complete the random walk example. 
 You can experiment with different parameters to create different musical results.
@@ -26,10 +29,11 @@ You must fill in:
 - duration: The duration of each note in beats (e.g. 0.5 for quaver, 1 for crochet, etc.)
 - scale_type: The scale to constrain the random walk to (e.g. "major", "minor", "chromatic").  If left unspecified (scale_type=None), the random walk will be generated without any scale constraints, meaning it can include any pitch.
 """
+
 @register_track
 def track3(track):
     randomWalk = track.add_sequence("randomWalk")
     # randomWalk.generate_random_walk(start_pitch='', num_notes=, max_step=, duration=, scale_type="")
     
-    
+
     randomWalk.play(tempo=120)
