@@ -71,14 +71,18 @@ class Track:
         engine.play_track(self)
         engine.close()
 
-    def export_midi(self, filename, tempo=120):
+    def export_midi(self, filename="output.mid", tempo=120):
         """
         Export this track to a MIDI file.
         
         Parameters:
-        - filename: Output MIDI file path
+        - filename: Output MIDI file path (default "output.mid")
         - tempo: Tempo in BPM (default 120)
         """
+        # Add .mid extension if not present
+        if not filename.endswith('.mid'):
+            filename += '.mid'
+        
         from music_engine.output.midi_export import MIDIExporter
         exporter = MIDIExporter(tempo=tempo)
         exporter.export(self, filename)

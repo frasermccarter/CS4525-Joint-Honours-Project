@@ -31,5 +31,5 @@ def track(guitar):
     guitar.export_midi("guitar_track.mid", tempo=120)
 
 
-controller.export_midi("full_song.mid", tempo=120)  #Calling export on the controller exports all tracks (to a single MIDI file called "full_song.mid" with a tempo of 120 BPM)
+export_midi("full_song.mid", tempo=120)  #Calling export on nothing exports all tracks (to a single MIDI file called "full_song.mid" with a tempo of 120 BPM)
 

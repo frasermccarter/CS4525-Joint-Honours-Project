@@ -125,15 +125,19 @@ class Controller:
     #MIDI Export
     #-------------------
 
-    def export_midi(self, filename, tempo=120, track: Track = None):
+    def export_midi(self, filename="output.mid", tempo=120, track: Track = None):
         """
         Export tracks to a MIDI file. USED FOR TESTING.
         
         Parameters:
-        - filename: Output MIDI file path
+        - filename: Output MIDI file path (default "output.mid")
         - tempo: Tempo in BPM (default 120)
         - track: Specific track to export. If None, exports all tracks as separate MIDI tracks in one file.
         """
+        # Add .mid extension if not present
+        if not filename.endswith('.mid'):
+            filename += '.mid'
+        
         exporter = MIDIExporter(tempo=tempo)
         if track:
             # Export single track

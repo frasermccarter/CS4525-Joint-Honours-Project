@@ -23,7 +23,7 @@ class TrackProxy:
     def play(self, tempo=120):
         self.play_requests.append(tempo)
 
-    def export_midi(self, filename, tempo=120):
+    def export_midi(self, filename="output.mid", tempo=120):
         self.export_requests.append((filename, tempo))
 
 #Track registration decorator
@@ -113,6 +113,15 @@ def play_polyphonic(tempo=120):
 
     #Play the newly registered tracks
     controller.play_polyphonic(tempo=tempo)
+
+
+def export_midi(filename="output.mid", tempo=120):
+    """Export all tracks to a MIDI file"""
+    # Add .mid extension if not present
+    if not filename.endswith('.mid'):
+        filename += '.mid'
+    
+    controller.export_midi(filename=filename, tempo=tempo)
 
 
 atexit.register(_finalise)

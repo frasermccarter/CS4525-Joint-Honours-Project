@@ -85,8 +85,8 @@ class Sequence:
         if num_notes < 0:
             raise ValueError("num_notes must be a non-negative number.")
         
-        if scale_type not in [None, 'major', 'minor']:
-            raise ValueError("scale_type must be None, 'major', or 'minor'.")
+        if scale_type not in [None, 'major', 'minor', 'chromatic']:
+            raise ValueError("scale_type must be None, 'major', 'minor', or 'chromatic'.")
         
         #Convert start_pitch to MIDI if needed
         start_note = NoteClass(start_pitch, 0.1)  #Temporary note to get MIDI pitch
@@ -97,6 +97,10 @@ class Sequence:
             #Use scale-constrained random walk
             generator = RandomWalk(scale_type=scale_type)
             generated_pitches = generator.generate(start_midi, num_notes, duration)
+        elif scale_type == 'chromatic':
+            #Use chromatic random walk
+            generator = RandomWalk()
+            generated_pitches = generator.generate_chromatic(start_midi, num_notes, max_step, duration)
         else:  # scale_type is None
             #Use chromatic random walk
             generator = RandomWalk()
