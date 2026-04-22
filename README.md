@@ -7,3 +7,5 @@ For more information on how to operate and use the engine please refer to the us
 Example scripts can be found named as ex[1-6]_xxx.py.
 
 Survey tasks are named task1.py, task2.py and task3.py and have been left for reference.
+
+The GitHub repository for this project can be found at: https://github.com/frasermccarter/CS4525-Joint-Honours-Project
