@@ -34,7 +34,7 @@ def track(randomWalk):                                  #To create a track, simp
     minorWalk = randomWalk.add_sequence("minorWalk")
     minorWalk.generate_random_walk(start_pitch=440.0, num_notes=16, max_step=2, duration=0.5, scale_type="minor")
 
-    minorWalk.play(120)
+#     minorWalk.play(120)
 
 
 """Rhythm Generator Example"""
@@ -43,7 +43,7 @@ def track(rhythm):
     rhythmEx = rhythm.add_sequence("rhythmEx")
     rhythmEx.generate_rhythm_sequence(pitch='C3', total_beats=4)    #This generates a rhythm pattern that fills a 4 beat bar with notes of pitch C3.  The durations of the notes are generated randomly but will always add up to 4 beats.
     
-    rhythm.play(tempo=120)
+#     rhythm.play(tempo=120)
 
 
 """Arpeggio Examples"""
@@ -70,5 +70,5 @@ def track(arpeggio):
     arpDown = arpeggio.add_sequence("arpDown")
     arpDown.generate_arpeggio(chord_symbol="Am", octave=4, note_duration=0.5, direction="down") #This generates an arpeggio based on the A minor chord, starting from the root note (A4) and descending through the chord tones (E4, C4).  Each note has a duration of 0.5 beats.
     
-    arpUp.play(tempo=120)
-    arpDown.play(120)
+#     arpUp.play(tempo=120)
+#     arpDown.play(120)
